@@ -11,6 +11,9 @@ service NoteService {
   rpc GetNote (GetNoteRequest) returns (GetNoteResponse);
 }
 
+message empty {
+}
+
 message NoteContent {
   string title = 1;
   string text = 2;
@@ -30,7 +33,7 @@ message DeleteNoteRequest {
 }
 
 message DeleteNoteResponse {
-  int64 id = 1;
+  empty empty = 1;
 }
 
 message UpdateNoteRequest {
@@ -46,7 +49,6 @@ message GetNoteRequest {
 }
 
 message GetNoteResponse {
-  string title = 1;
-  string text = 2;
-  string author = 3;
+   int64 id = 1;
+   NoteContent NoteContent = 2;
 }
