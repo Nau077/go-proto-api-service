@@ -22,7 +22,6 @@ func main() {
 	desc.RegisterNoteServiceServer(s, note_v1.NewNote())
 
 	fmt.Println("Server is running on port:", port)
-
 	if err = s.Serve(list); err != nil {
 		log.Fatalf("failed to serve %s", err.Error())
 	}
