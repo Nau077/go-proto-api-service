@@ -6,12 +6,12 @@ option go_package = "github.com/Nau077/golang-pet-first/pkg/note_v1";
 
 service NoteService {
   rpc CreateNote (CreateNoteRequest) returns (CreateNoteResponse);
-  rpc DeleteNote (DeleteNoteRequest) returns (DeleteNoteResponse);
+  rpc DeleteNote (DeleteNoteRequest) returns (Empty);
   rpc UpdateNote (UpdateNoteRequest) returns (UpdateNoteResponse);
   rpc GetNote (GetNoteRequest) returns (GetNoteResponse);
 }
 
-message empty {
+message Empty {
 }
 
 message NoteContent {
@@ -30,10 +30,6 @@ message CreateNoteResponse {
 
 message DeleteNoteRequest {
   int64 id = 1;
-}
-
-message DeleteNoteResponse {
-  empty empty = 1;
 }
 
 message UpdateNoteRequest {
