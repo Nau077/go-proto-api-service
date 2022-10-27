@@ -32,6 +32,10 @@ message DeleteNoteRequest {
   int64 id = 1;
 }
 
+message DeleteNoteResponse {
+  int64 id = 1;
+}
+
 message UpdateNoteRequest {
   int64 id = 1;
   NoteContent NoteContent = 2;

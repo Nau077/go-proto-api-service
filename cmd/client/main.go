@@ -20,9 +20,11 @@ func main() {
 	client := desc.NewNoteServiceClient(con)
 
 	res, err := client.CreateNote(context.Background(), &desc.CreateNoteRequest{
-		Title:  "kfkf",
-		Text:   "rr",
-		Author: "kkk",
+		NoteContent: &desc.NoteContent{
+			Title:  "kfkf",
+			Text:   "rr",
+			Author: "kkk",
+		},
 	})
 	if err != nil {
 		log.Println(err.Error())
