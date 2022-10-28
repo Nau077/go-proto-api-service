@@ -10,7 +10,7 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
-func (n *Note) DeleteNote(ctx context.Context, req *desc.DeleteNoteRequest) (*desc.DeleteNoteResponse, error) {
+func (n *Note) DeleteNote(ctx context.Context, req *desc.DeleteNoteRequest) (*desc.Empty, error) {
 	dbDsn := fmt.Sprintf(
 		"host=%s port=%s user=%s password=%s dbname=%s sslmode=%s",
 		host, port, dbUser, dbPassword, dbName, sslMode,
@@ -45,7 +45,5 @@ func (n *Note) DeleteNote(ctx context.Context, req *desc.DeleteNoteRequest) (*de
 		return nil, err
 	}
 
-	return &desc.DeleteNoteResponse{
-		Id: id,
-	}, nil
+	return &desc.Empty{}, nil
 }
