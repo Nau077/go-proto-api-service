@@ -11,6 +11,7 @@ import (
 const address = "localhost:50051"
 
 func main() {
+	// nolint:staticcheck
 	con, err := grpc.Dial(address, grpc.WithInsecure())
 	if err != nil {
 		log.Fatalf("did not connect: %s", err.Error())

@@ -41,3 +41,7 @@ local-migration-up:
 .PHONY: local-migration-down
 local-migration-down:
 	goose -dir ${LOCAL_MIGRATION_DIR} postgres ${LOCAL_MIGRATION_DSN} down -v
+
+.PHONY: run/lint
+run/lint:
+	golangci-lint run
