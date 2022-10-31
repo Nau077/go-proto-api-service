@@ -11,6 +11,7 @@ import (
 const address = "localhost:50051"
 
 func main() {
+	// nolint:staticcheck
 	con, err := grpc.Dial(address, grpc.WithInsecure())
 	if err != nil {
 		log.Fatalf("did not connect: %s", err.Error())
@@ -20,9 +21,11 @@ func main() {
 	client := desc.NewNoteServiceClient(con)
 
 	res, err := client.CreateNote(context.Background(), &desc.CreateNoteRequest{
-		Title:  "kfkf",
-		Text:   "rr",
-		Author: "kkk",
+		NoteContent: &desc.NoteContent{
+			Title:  "kfkf",
+			Text:   "rr",
+			Author: "kkk",
+		},
 	})
 	if err != nil {
 		log.Println(err.Error())

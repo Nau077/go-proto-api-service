@@ -9,6 +9,7 @@ service NoteService {
   rpc DeleteNote (DeleteNoteRequest) returns (Empty);
   rpc UpdateNote (UpdateNoteRequest) returns (UpdateNoteResponse);
   rpc GetNote (GetNoteRequest) returns (GetNoteResponse);
+  rpc GetNoteList (Empty) returns (GetNoteListResponse);
 }
 
 message Empty {
@@ -18,6 +19,11 @@ message NoteContent {
   string title = 1;
   string text = 2;
   string author = 3;
+}
+
+message Record {
+  int64 id = 1;
+  NoteContent note_content = 2;
 }
 
 message CreateNoteRequest {
@@ -33,8 +39,7 @@ message DeleteNoteRequest {
 }
 
 message UpdateNoteRequest {
-  int64 id = 1;
-  NoteContent NoteContent = 2;
+  Record record = 1;
 }
 
 message UpdateNoteResponse {
@@ -46,6 +51,9 @@ message GetNoteRequest {
 }
 
 message GetNoteResponse {
-   int64 id = 1;
-   NoteContent NoteContent = 2;
+   Record record = 1;
+}
+
+message GetNoteListResponse {
+  repeated Record record = 1;
 }
