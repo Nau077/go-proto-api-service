@@ -2,10 +2,20 @@ syntax = "proto3";
 
 package api.note_v1;
 
+// import "google/protobuf/timestamp.proto";
+import "google/api/annotations.proto";
+import "validate/validate.proto";
+
 option go_package = "github.com/Nau077/golang-pet-first/pkg/note_v1";
 
 service NoteService {
-  rpc CreateNote (CreateNoteRequest) returns (CreateNoteResponse);
+  rpc CreateNote (CreateNoteRequest) returns (CreateNoteResponse) {
+    option (google.api.http) = {
+      post: "/note/v1/create",
+      body: "*"
+    };
+  }
+
   rpc DeleteNote (DeleteNoteRequest) returns (Empty);
   rpc UpdateNote (UpdateNoteRequest) returns (UpdateNoteResponse);
   rpc GetNote (GetNoteRequest) returns (GetNoteResponse);
@@ -19,6 +29,8 @@ message NoteContent {
   string title = 1;
   string text = 2;
   string author = 3;
+  string email = 4 [(validate.rules).string.email = true];
+//  google.protobuf.Timestamp created_at = 5;
 }
 
 message Record {

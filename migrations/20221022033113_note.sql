@@ -6,7 +6,6 @@ CREATE TABLE note (
     author              text,
     created_at          timestamp not null default now(),
     updated_at          timestamp
-
 );
 
 -- +goose Down
