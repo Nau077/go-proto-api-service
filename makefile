@@ -68,6 +68,10 @@ local-migration-up:
 local-migration-down:
 	goose -dir ${LOCAL_MIGRATION_DIR} postgres ${LOCAL_MIGRATION_DSN} down -v
 
+.PHONY: run/db
+run/db:
+	docker-compose up pg-go-db
+
 .PHONY: run/lint
 run/lint:
 	golangci-lint run

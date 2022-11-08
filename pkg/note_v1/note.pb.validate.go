@@ -352,6 +352,64 @@ func (m *Record) validate(all bool) error {
 		}
 	}
 
+	if all {
+		switch v := interface{}(m.GetUpdatedAt()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, RecordValidationError{
+					field:  "UpdatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, RecordValidationError{
+					field:  "UpdatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetUpdatedAt()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return RecordValidationError{
+				field:  "UpdatedAt",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetCreatedAt()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, RecordValidationError{
+					field:  "CreatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, RecordValidationError{
+					field:  "CreatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetCreatedAt()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return RecordValidationError{
+				field:  "CreatedAt",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
 	if len(errors) > 0 {
 		return RecordMultiError(errors)
 	}
@@ -790,12 +848,14 @@ func (m *UpdateNoteRequest) validate(all bool) error {
 
 	var errors []error
 
+	// no validation rules for Id
+
 	if all {
-		switch v := interface{}(m.GetRecord()).(type) {
+		switch v := interface{}(m.GetNoteContent()).(type) {
 		case interface{ ValidateAll() error }:
 			if err := v.ValidateAll(); err != nil {
 				errors = append(errors, UpdateNoteRequestValidationError{
-					field:  "Record",
+					field:  "NoteContent",
 					reason: "embedded message failed validation",
 					cause:  err,
 				})
@@ -803,16 +863,16 @@ func (m *UpdateNoteRequest) validate(all bool) error {
 		case interface{ Validate() error }:
 			if err := v.Validate(); err != nil {
 				errors = append(errors, UpdateNoteRequestValidationError{
-					field:  "Record",
+					field:  "NoteContent",
 					reason: "embedded message failed validation",
 					cause:  err,
 				})
 			}
 		}
-	} else if v, ok := interface{}(m.GetRecord()).(interface{ Validate() error }); ok {
+	} else if v, ok := interface{}(m.GetNoteContent()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return UpdateNoteRequestValidationError{
-				field:  "Record",
+				field:  "NoteContent",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
@@ -1256,7 +1316,7 @@ func (m *GetNoteListResponse) validate(all bool) error {
 
 	var errors []error
 
-	for idx, item := range m.GetRecord() {
+	for idx, item := range m.GetRecords() {
 		_, _ = idx, item
 
 		if all {
@@ -1264,7 +1324,7 @@ func (m *GetNoteListResponse) validate(all bool) error {
 			case interface{ ValidateAll() error }:
 				if err := v.ValidateAll(); err != nil {
 					errors = append(errors, GetNoteListResponseValidationError{
-						field:  fmt.Sprintf("Record[%v]", idx),
+						field:  fmt.Sprintf("Records[%v]", idx),
 						reason: "embedded message failed validation",
 						cause:  err,
 					})
@@ -1272,7 +1332,7 @@ func (m *GetNoteListResponse) validate(all bool) error {
 			case interface{ Validate() error }:
 				if err := v.Validate(); err != nil {
 					errors = append(errors, GetNoteListResponseValidationError{
-						field:  fmt.Sprintf("Record[%v]", idx),
+						field:  fmt.Sprintf("Records[%v]", idx),
 						reason: "embedded message failed validation",
 						cause:  err,
 					})
@@ -1281,7 +1341,7 @@ func (m *GetNoteListResponse) validate(all bool) error {
 		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return GetNoteListResponseValidationError{
-					field:  fmt.Sprintf("Record[%v]", idx),
+					field:  fmt.Sprintf("Records[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
 				}

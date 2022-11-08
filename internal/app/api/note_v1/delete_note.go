@@ -7,11 +7,11 @@ import (
 	_ "github.com/jackc/pgx/stdlib"
 )
 
-func (n *Note) DeleteNote(ctx context.Context, req *desc.DeleteNoteRequest) error {
-	err := n.noteService.DeleteNote(ctx, req)
+func (n *Note) DeleteNote(ctx context.Context, req *desc.DeleteNoteRequest) (*desc.Empty, error) {
+	err := n.noteService.DeleteNote(ctx, req.GetId())
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	return nil
+	return &desc.Empty{}, nil
 }

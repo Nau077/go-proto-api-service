@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package api.note_v1;
 
-// import "google/protobuf/timestamp.proto";
+import "google/protobuf/timestamp.proto";
 import "google/api/annotations.proto";
 import "validate/validate.proto";
 
@@ -16,10 +16,27 @@ service NoteService {
     };
   }
 
-  rpc DeleteNote (DeleteNoteRequest) returns (Empty);
-  rpc UpdateNote (UpdateNoteRequest) returns (UpdateNoteResponse);
-  rpc GetNote (GetNoteRequest) returns (GetNoteResponse);
-  rpc GetNoteList (Empty) returns (GetNoteListResponse);
+  rpc DeleteNote (DeleteNoteRequest) returns (Empty)  {
+    option (google.api.http) = {
+      delete: "/note/v1/delete/{id}"
+    };
+  }
+  rpc UpdateNote (UpdateNoteRequest) returns (UpdateNoteResponse) {
+    option (google.api.http) = {
+      put: "/note/v1/update"
+      body: "*"
+    };
+  }
+  rpc GetNote (GetNoteRequest) returns (GetNoteResponse){
+    option (google.api.http) = {
+      get: "/note/v1/get/{id}"
+    };
+  };
+  rpc GetNoteList (Empty) returns (GetNoteListResponse){
+    option (google.api.http) = {
+      get: "/note/v1/list"
+    };
+  }
 }
 
 message Empty {
@@ -30,12 +47,13 @@ message NoteContent {
   string text = 2;
   string author = 3;
   string email = 4 [(validate.rules).string.email = true];
-//  google.protobuf.Timestamp created_at = 5;
 }
 
 message Record {
-  int64 id = 1;
-  NoteContent note_content = 2;
+    int64 id = 1;
+    NoteContent note_content = 2;
+    google.protobuf.Timestamp updated_at = 3;
+    google.protobuf.Timestamp created_at = 4;    
 }
 
 message CreateNoteRequest {
@@ -51,7 +69,8 @@ message DeleteNoteRequest {
 }
 
 message UpdateNoteRequest {
-  Record record = 1;
+    int64 id = 1;
+    NoteContent NoteContent = 2;
 }
 
 message UpdateNoteResponse {
@@ -67,5 +86,5 @@ message GetNoteResponse {
 }
 
 message GetNoteListResponse {
-  repeated Record record = 1;
+  repeated Record records = 1;
 }
