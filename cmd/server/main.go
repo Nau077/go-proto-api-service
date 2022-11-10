@@ -14,6 +14,7 @@ import (
 	desc "github.com/Nau077/golang-pet-first/pkg/note_v1"
 	grpc_validator "github.com/grpc-ecosystem/go-grpc-middleware/validator"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
+	_ "github.com/jackc/pgx/stdlib"
 	"github.com/jmoiron/sqlx"
 	"google.golang.org/grpc"
 )
@@ -40,11 +41,20 @@ func main() {
 	go func() {
 		defer wg.Done()
 		// nolint:errcheck
-		startGRPC()
+		error := startGRPC()
+		if error != nil {
+			log.Fatalf("failed running grpc server: %s", error.Error())
+		}
 	}()
-	// nolint:errcheck
-	go startHttp(&wg)
-	// в wg.Wait будет висеть, пока счетчик не обнулится
+
+	go func() {
+		defer wg.Done()
+		error := startHttp()
+		if error != nil {
+			log.Fatalf("failed running http server: %s", error.Error())
+		}
+	}()
+
 	wg.Wait()
 }
 
@@ -77,15 +87,13 @@ func startGRPC() error {
 	fmt.Println("grpc Server is running on port:", hostGrpc)
 
 	if err = s.Serve(list); err != nil {
-		log.Fatalf("failed to serve %s", err.Error())
+		return err
 	}
 
 	return nil
 }
 
-func startHttp(wg *sync.WaitGroup) error {
-	defer wg.Done()
-
+func startHttp() error {
 	ctx := context.Background()
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
@@ -100,5 +108,8 @@ func startHttp(wg *sync.WaitGroup) error {
 
 	fmt.Println("http Server is running on port:", hostHttp)
 
-	return http.ListenAndServe(hostHttp, mux)
+	if err = http.ListenAndServe(hostHttp, mux); err != nil {
+		return err
+	}
+	return nil
 }

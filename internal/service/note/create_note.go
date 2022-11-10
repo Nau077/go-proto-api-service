@@ -8,7 +8,6 @@ import (
 
 func (s *Service) CreateNote(ctx context.Context, req *desc.CreateNoteRequest) (*desc.CreateNoteResponse, error) {
 	id, err := s.noteRepository.CreateNote(ctx, req)
-
 	if err != nil {
 		return nil, err
 	}

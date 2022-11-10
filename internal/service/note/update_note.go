@@ -8,7 +8,6 @@ import (
 
 func (s *Service) UpdateNote(ctx context.Context, req *desc.UpdateNoteRequest) (*desc.UpdateNoteResponse, error) {
 	res, err := s.noteRepository.UpdateNote(ctx, req)
-
 	if err != nil {
 		return nil, err
 	}

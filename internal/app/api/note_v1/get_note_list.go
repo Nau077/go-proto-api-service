@@ -4,7 +4,6 @@ import (
 	"context"
 
 	desc "github.com/Nau077/golang-pet-first/pkg/note_v1"
-	_ "github.com/jackc/pgx/stdlib"
 )
 
 func (n *Note) GetNoteList(ctx context.Context, req *desc.Empty) (*desc.GetNoteListResponse, error) {
