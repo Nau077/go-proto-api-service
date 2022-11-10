@@ -6,14 +6,13 @@ import (
 
 	sq "github.com/Masterminds/squirrel"
 	"github.com/Nau077/golang-pet-first/internal/repository/table"
-	_ "github.com/Nau077/golang-pet-first/internal/repository/table"
 	desc "github.com/Nau077/golang-pet-first/pkg/note_v1"
 	_ "github.com/jackc/pgx/stdlib"
 	"github.com/jmoiron/sqlx"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
-type NoteRepository interface {
+type Repository interface {
 	CreateNote(ctx context.Context, req *desc.CreateNoteRequest) (int64, error)
 	DeleteNote(ctx context.Context, userId int64) error
 	GetNoteList(ctx context.Context, req *desc.Empty) (*desc.GetNoteListResponse, error)
@@ -35,7 +34,7 @@ type record struct {
 	updatedAt *time.Time
 }
 
-func NewNoteRepository(db *sqlx.DB) NoteRepository {
+func NewNoteRepository(db *sqlx.DB) Repository {
 	return &repository{
 		db: db,
 	}
@@ -72,23 +71,9 @@ func (r *repository) CreateNote(ctx context.Context, req *desc.CreateNoteRequest
 func (r *repository) DeleteNote(ctx context.Context, userId int64) error {
 	builder := sq.Delete(table.Note).
 		PlaceholderFormat(sq.Dollar).
-		Where(sq.Eq{"id": userId}).
-		Suffix("returning id")
+		Where(sq.Eq{"id": userId})
 
-	query, args, err := builder.ToSql()
-	if err != nil {
-		return err
-	}
-
-	row, err := r.db.QueryContext(ctx, query, args...)
-	if err != nil {
-		return err
-	}
-	defer row.Close()
-
-	row.Next()
-	var id int64
-	err = row.Scan(&id)
+	_, _, err := builder.ToSql()
 	if err != nil {
 		return err
 	}
@@ -203,15 +188,13 @@ func (r repository) GetNote(ctx context.Context, req *desc.GetNoteRequest) (*des
 }
 
 func (r repository) UpdateNote(ctx context.Context, req *desc.UpdateNoteRequest) (*desc.UpdateNoteResponse, error) {
-	currentTime := time.Now()
-
 	builder := sq.Update(table.Note).
 		PlaceholderFormat(sq.Dollar).
 		Set("title", req.GetNoteContent().GetTitle()).
 		Set("text", req.GetNoteContent().GetText()).
 		Set("author", req.GetNoteContent().GetAuthor()).
 		Set("email", req.GetNoteContent().GetEmail()).
-		Set("updated_at", currentTime).
+		Set("updated_at", time.Now()).
 		Where(sq.Eq{"id": req.GetId()}).
 		Suffix("returning id")
 

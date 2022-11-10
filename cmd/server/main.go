@@ -9,7 +9,7 @@ import (
 	"sync"
 
 	"github.com/Nau077/golang-pet-first/internal/app/api/note_v1"
-	"github.com/Nau077/golang-pet-first/internal/repository"
+	repository "github.com/Nau077/golang-pet-first/internal/repository/note"
 	"github.com/Nau077/golang-pet-first/internal/service/note"
 	desc "github.com/Nau077/golang-pet-first/pkg/note_v1"
 	grpc_validator "github.com/grpc-ecosystem/go-grpc-middleware/validator"
@@ -77,7 +77,6 @@ func startGRPC() error {
 
 	if err = s.Serve(list); err != nil {
 		log.Fatalf("failed to serve %s", err.Error())
-		return err
 	}
 
 	return nil

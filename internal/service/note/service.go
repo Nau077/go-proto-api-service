@@ -1,12 +1,12 @@
 package note
 
-import "github.com/Nau077/golang-pet-first/internal/repository"
+import repository "github.com/Nau077/golang-pet-first/internal/repository/note"
 
 type Service struct {
-	noteRepository repository.NoteRepository
+	noteRepository repository.Repository
 }
 
-func NewService(noteRepository repository.NoteRepository) *Service {
+func NewService(noteRepository repository.Repository) *Service {
 	return &Service{
 		noteRepository: noteRepository,
 	}

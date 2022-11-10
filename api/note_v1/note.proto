@@ -14,24 +14,27 @@ service NoteService {
       post: "/note/v1/create",
       body: "*"
     };
-  }
+  };
 
   rpc DeleteNote (DeleteNoteRequest) returns (Empty)  {
     option (google.api.http) = {
       delete: "/note/v1/delete/{id}"
     };
-  }
+  };
+
   rpc UpdateNote (UpdateNoteRequest) returns (UpdateNoteResponse) {
     option (google.api.http) = {
       put: "/note/v1/update"
       body: "*"
     };
-  }
+  };
+
   rpc GetNote (GetNoteRequest) returns (GetNoteResponse){
     option (google.api.http) = {
       get: "/note/v1/get/{id}"
     };
   };
+
   rpc GetNoteList (Empty) returns (GetNoteListResponse){
     option (google.api.http) = {
       get: "/note/v1/list"
@@ -52,8 +55,8 @@ message NoteContent {
 message Record {
     int64 id = 1;
     NoteContent note_content = 2;
+    google.protobuf.Timestamp created_at = 4;   
     google.protobuf.Timestamp updated_at = 3;
-    google.protobuf.Timestamp created_at = 4;    
 }
 
 message CreateNoteRequest {
