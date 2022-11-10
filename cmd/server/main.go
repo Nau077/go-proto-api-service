@@ -39,9 +39,10 @@ func main() {
 
 	go func() {
 		defer wg.Done()
+		// nolint:errcheck
 		startGRPC()
 	}()
-
+	// nolint:errcheck
 	go startHttp(&wg)
 	// в wg.Wait будет висеть, пока счетчик не обнулится
 	wg.Wait()
@@ -90,6 +91,7 @@ func startHttp(wg *sync.WaitGroup) error {
 	defer cancel()
 
 	mux := runtime.NewServeMux()
+	// nolint:staticcheck
 	opts := []grpc.DialOption{grpc.WithInsecure()}
 	err := desc.RegisterNoteServiceHandlerFromEndpoint(ctx, mux, hostGrpc, opts)
 	if err != nil {
