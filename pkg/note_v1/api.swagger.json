@@ -1,0 +1,295 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "note.proto",
+    "version": "version not set"
+  },
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/note/v1/create": {
+      "post": {
+        "operationId": "NoteService_CreateNote",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/note_v1CreateNoteResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/runtimeError"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/note_v1CreateNoteRequest"
+            }
+          }
+        ],
+        "tags": [
+          "NoteService"
+        ]
+      }
+    },
+    "/note/v1/delete/{id}": {
+      "delete": {
+        "operationId": "NoteService_DeleteNote",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/note_v1Empty"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/runtimeError"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "NoteService"
+        ]
+      }
+    },
+    "/note/v1/get/{id}": {
+      "get": {
+        "operationId": "NoteService_GetNote",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/note_v1GetNoteResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/runtimeError"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "NoteService"
+        ]
+      }
+    },
+    "/note/v1/list": {
+      "get": {
+        "operationId": "NoteService_GetNoteList",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/note_v1GetNoteListResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/runtimeError"
+            }
+          }
+        },
+        "tags": [
+          "NoteService"
+        ]
+      }
+    },
+    "/note/v1/update": {
+      "put": {
+        "operationId": "NoteService_UpdateNote",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/note_v1UpdateNoteResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/runtimeError"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/note_v1UpdateNoteRequest"
+            }
+          }
+        ],
+        "tags": [
+          "NoteService"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "note_v1CreateNoteRequest": {
+      "type": "object",
+      "properties": {
+        "NoteContent": {
+          "$ref": "#/definitions/note_v1NoteContent"
+        }
+      }
+    },
+    "note_v1CreateNoteResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "note_v1Empty": {
+      "type": "object"
+    },
+    "note_v1GetNoteListResponse": {
+      "type": "object",
+      "properties": {
+        "records": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/note_v1Record"
+          }
+        }
+      }
+    },
+    "note_v1GetNoteResponse": {
+      "type": "object",
+      "properties": {
+        "record": {
+          "$ref": "#/definitions/note_v1Record"
+        }
+      }
+    },
+    "note_v1NoteContent": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "text": {
+          "type": "string"
+        },
+        "author": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        }
+      }
+    },
+    "note_v1Record": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "note_content": {
+          "$ref": "#/definitions/note_v1NoteContent"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "note_v1UpdateNoteRequest": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "NoteContent": {
+          "$ref": "#/definitions/note_v1NoteContent"
+        }
+      }
+    },
+    "note_v1UpdateNoteResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "type_url": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "runtimeError": {
+      "type": "object",
+      "properties": {
+        "error": {
+          "type": "string"
+        },
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    }
+  }
+}
