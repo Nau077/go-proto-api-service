@@ -7,7 +7,6 @@ import (
 	sq "github.com/Masterminds/squirrel"
 	"github.com/Nau077/golang-pet-first/internal/repository/table"
 	desc "github.com/Nau077/golang-pet-first/pkg/note_v1"
-	_ "github.com/jackc/pgx/stdlib"
 	"github.com/jmoiron/sqlx"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
@@ -73,11 +72,17 @@ func (r *repository) DeleteNote(ctx context.Context, userId int64) error {
 		PlaceholderFormat(sq.Dollar).
 		Where(sq.Eq{"id": userId})
 
-	_, _, err := builder.ToSql()
+	query, args, err := builder.ToSql()
 	if err != nil {
 		return err
 	}
 
+	rows, err := r.db.QueryContext(ctx, query, args...)
+	if err != nil {
+		return err
+	}
+
+	defer rows.Close()
 	return nil
 }
 

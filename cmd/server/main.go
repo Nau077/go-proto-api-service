@@ -41,16 +41,16 @@ func main() {
 	go func() {
 		defer wg.Done()
 		// nolint:errcheck
-		error := startGRPC()
-		if error != nil {
+		err := startGRPC()
+		if err != nil {
 			log.Fatalf("failed running grpc server: %s", error.Error())
 		}
 	}()
 
 	go func() {
 		defer wg.Done()
-		error := startHttp()
-		if error != nil {
+		err := startHttp()
+		if err != nil {
 			log.Fatalf("failed running http server: %s", error.Error())
 		}
 	}()
