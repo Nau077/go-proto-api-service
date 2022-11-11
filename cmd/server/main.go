@@ -43,7 +43,7 @@ func main() {
 		// nolint:errcheck
 		err := startGRPC()
 		if err != nil {
-			log.Fatalf("failed running grpc server: %s", error.Error())
+			log.Fatalf("failed running grpc server: %s", err.Error())
 		}
 	}()
 
@@ -51,7 +51,7 @@ func main() {
 		defer wg.Done()
 		err := startHttp()
 		if err != nil {
-			log.Fatalf("failed running http server: %s", error.Error())
+			log.Fatalf("failed running http server: %s", err.Error())
 		}
 	}()
 

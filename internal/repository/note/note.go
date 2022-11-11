@@ -77,12 +77,11 @@ func (r *repository) DeleteNote(ctx context.Context, userId int64) error {
 		return err
 	}
 
-	rows, err := r.db.QueryContext(ctx, query, args...)
+	_, err = r.db.ExecContext(ctx, query, args...)
 	if err != nil {
 		return err
 	}
 
-	defer rows.Close()
 	return nil
 }
 
