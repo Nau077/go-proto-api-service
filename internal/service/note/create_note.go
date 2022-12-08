@@ -3,16 +3,14 @@ package note
 import (
 	"context"
 
-	desc "github.com/Nau077/golang-pet-first/pkg/note_v1"
+	"github.com/Nau077/golang-pet-first/internal/model"
 )
 
-func (s *Service) CreateNote(ctx context.Context, req *desc.CreateNoteRequest) (*desc.CreateNoteResponse, error) {
-	id, err := s.noteRepository.CreateNote(ctx, req)
+func (s *Service) CreateNote(ctx context.Context, noteContent *model.NoteContent) (int64, error) {
+	id, err := s.noteRepository.CreateNote(ctx, noteContent)
 	if err != nil {
-		return nil, err
+		return 0, err
 	}
 
-	return &desc.CreateNoteResponse{
-		Id: id,
-	}, nil
+	return id, nil
 }

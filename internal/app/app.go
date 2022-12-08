@@ -8,14 +8,15 @@ import (
 	"sync"
 
 	"github.com/Nau077/golang-pet-first/internal/app/api/note_v1"
+	desc "github.com/Nau077/golang-pet-first/pkg/note_v1"
+	grpcValidator "github.com/grpc-ecosystem/go-grpc-middleware/validator"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
-	"github.com/jhump/protoreflect/desc"
 	"google.golang.org/grpc"
 )
 
 // App
 type App struct {
-	noteImpl        *note_v1.Note
+	note            *note_v1.Note
 	serviceProvider *serviceProvider
 	pathConfig      string
 	grpcServer      *grpc.Server
@@ -52,6 +53,7 @@ func (a *App) Run() error {
 	}
 
 	wg.Wait()
+
 	return nil
 }
 
@@ -62,15 +64,25 @@ func (a *App) initDeps(ctx context.Context) error {
 		a.initGRPCServer,
 		a.initPublicHTTPHandlers,
 	}
+
+	for _, f := range inits {
+		err := f(ctx)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
 
 func (a *App) initServiceProvider(_ context.Context) error {
 	a.serviceProvider = newServiceProvider(a.pathConfig)
+
 	return nil
 }
 
 func (a *App) initServer(ctx context.Context) error {
-	a.noteImpl = note_v1.NewNote(a.serviceProvider.GetNoteService(ctx))
+	a.note = note_v1.NewNote(a.serviceProvider.GetNoteService(ctx))
 
 	return nil
 }
@@ -79,6 +91,10 @@ func (a *App) initGRPCServer(_ context.Context) error {
 	a.grpcServer = grpc.NewServer(
 		grpc.UnaryInterceptor(grpcValidator.UnaryServerInterceptor()),
 	)
+
+	desc.RegisterNoteServiceServer(a.grpcServer, a.note)
+
+	return nil
 }
 
 func (a *App) initPublicHTTPHandlers(ctx context.Context) error {
@@ -87,7 +103,7 @@ func (a *App) initPublicHTTPHandlers(ctx context.Context) error {
 	// nolint:staticcheck
 	opts := []grpc.DialOption{grpc.WithInsecure}
 
-	err := desc.RegisterNoteV1HandlerFromEndpoint(ctx, a.mux, a.serviceProvider.GetConfig().GRPC.GetAddress(), opts)
+	err := desc.RegisterNoteServiceHandlerFromEndpoint(ctx, a.mux, a.serviceProvider.GetConfig().GRPC.GetAddress(), opts)
 	if err != nil {
 		return err
 	}

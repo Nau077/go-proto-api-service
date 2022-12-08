@@ -28,15 +28,7 @@ func ToDescNoteContent(noteContent *model.NoteContent) *desc.NoteContent {
 
 func ToUpdateNoteInfo(updateNoteInfo *desc.UpdateNoteInfo) *model.UpdateNoteInfo {
 	return &model.UpdateNoteInfo{
-		Title:  sql.NullString{String: updateNoteInfo.GetTitle().GetValue(), Valid: true},
-		Author: sql.NullString{String: updateNoteInfo.GetAuthor().GetValue(), Valid: true},
-		Text:   sql.NullString{String: updateNoteInfo.GetText().GetValue(), Valid: true},
-		Email:  sql.NullString{String: updateNoteInfo.GetEmail().GetValue(), Valid: true},
-	}
-}
-
-func ToDeskUpdateNoteInfo(updateNoteInfo *desc.UpdateNoteInfo) *model.UpdateNoteInfo {
-	return &model.UpdateNoteInfo{
+		Id:     updateNoteInfo.Id,
 		Title:  sql.NullString{String: updateNoteInfo.GetTitle().GetValue(), Valid: true},
 		Author: sql.NullString{String: updateNoteInfo.GetAuthor().GetValue(), Valid: true},
 		Text:   sql.NullString{String: updateNoteInfo.GetText().GetValue(), Valid: true},
@@ -45,11 +37,12 @@ func ToDeskUpdateNoteInfo(updateNoteInfo *desc.UpdateNoteInfo) *model.UpdateNote
 }
 
 func ToRecord(record *desc.Record) *model.Record {
+
 	return &model.Record{
-		ID:          record.GetId(),
-		NoteContent: record.GetNoteContent(),
+		Id:          record.GetId(),
+		NoteContent: ToNoteContent(record.NoteContent),
 		CreatedAt:   record.GetCreatedAt().AsTime(),
-		UpdatedAt:   record.GetUpdatedAt(),
+		UpdatedAt:   sql.NullTime{Time: record.GetUpdatedAt().AsTime(), Valid: true},
 	}
 }
 
@@ -60,9 +53,18 @@ func ToDeskRecord(record *model.Record) *desc.Record {
 	}
 
 	return &desc.Record{
-		Id:          record.ID,
+		Id:          record.Id,
 		NoteContent: ToDescNoteContent(record.NoteContent),
 		CreatedAt:   timestamppb.New(record.CreatedAt),
 		UpdatedAt:   updatedAt,
 	}
+}
+
+func ToDescRecordsList(records *[]model.Record) []*desc.Record {
+	var recordsList []*desc.Record
+
+	for _, record := range *records {
+		recordsList = append(recordsList, ToDeskRecord(&record))
+	}
+	return recordsList
 }
