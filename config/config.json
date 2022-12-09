@@ -1,0 +1,14 @@
+{
+    "db": {
+      "dsn": "host=localhost port=54321 dbname=note-service user=note-service-user password=note-service-password",
+      "max_open_connections": "10"  
+    },
+    "grpc": {
+        "host": "localhost",
+        "port":7001
+    },
+    "http": {
+        "host": "localhost",
+        "port":7002        
+    }
+}

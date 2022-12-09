@@ -3,14 +3,17 @@ package note_v1
 import (
 	"context"
 
+	"github.com/Nau077/golang-pet-first/internal/app/converter"
 	desc "github.com/Nau077/golang-pet-first/pkg/note_v1"
 )
 
 func (n *Note) UpdateNote(ctx context.Context, req *desc.UpdateNoteRequest) (*desc.UpdateNoteResponse, error) {
-	res, err := n.noteService.UpdateNote(ctx, req)
+	id, err := n.noteService.UpdateNote(ctx, converter.ToUpdateNoteInfo(req.GetUpdateNoteInfo()))
 	if err != nil {
 		return nil, err
 	}
 
-	return res, nil
+	return &desc.UpdateNoteResponse{
+		Id: id,
+	}, nil
 }

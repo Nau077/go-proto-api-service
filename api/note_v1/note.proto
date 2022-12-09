@@ -3,6 +3,7 @@ syntax = "proto3";
 package api.note_v1;
 
 import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
 import "google/api/annotations.proto";
 import "validate/validate.proto";
 
@@ -59,6 +60,14 @@ message Record {
     google.protobuf.Timestamp updated_at = 3;
 }
 
+message UpdateNoteInfo {
+  int64 id = 1;
+  google.protobuf.StringValue title = 2;
+  google.protobuf.StringValue text = 3;
+  google.protobuf.StringValue author = 4;
+  google.protobuf.StringValue email = 5 [(validate.rules).string.email = true];
+}
+
 message CreateNoteRequest {
    NoteContent NoteContent = 1;
 }
@@ -72,8 +81,7 @@ message DeleteNoteRequest {
 }
 
 message UpdateNoteRequest {
-    int64 id = 1;
-    NoteContent NoteContent = 2;
+    UpdateNoteInfo UpdateNoteInfo = 1;
 }
 
 message UpdateNoteResponse {
