@@ -23,16 +23,6 @@ type repository struct {
 	client db.Client
 }
 
-type record struct {
-	id        int64
-	title     string
-	text      string
-	author    string
-	email     string
-	createdAt time.Time
-	updatedAt *time.Time
-}
-
 func NewNoteRepository(client db.Client) Repository {
 	return &repository{
 		client: client,
@@ -108,11 +98,14 @@ func (r *repository) GetNoteList(ctx context.Context, req *desc.Empty) (*[]model
 	var records *[]model.Record
 
 	err = r.client.DB().SelectContext(ctx, records, q, args...)
+	if err != nil {
+		return nil, err
+	}
 
 	return records, nil
 }
 
-func (r repository) GetNote(ctx context.Context, id int64) (*model.Record, error) {
+func (r *repository) GetNote(ctx context.Context, id int64) (*model.Record, error) {
 	builder := sq.Select("id, title, author, text, email, created_at, updated_at").
 		PlaceholderFormat(sq.Dollar).
 		From(table.Note).
@@ -136,7 +129,7 @@ func (r repository) GetNote(ctx context.Context, id int64) (*model.Record, error
 	return note, nil
 }
 
-func (r repository) UpdateNote(ctx context.Context, updateNoteInfo *model.UpdateNoteInfo) (int64, error) {
+func (r *repository) UpdateNote(ctx context.Context, updateNoteInfo *model.UpdateNoteInfo) (int64, error) {
 	builder := sq.Update(table.Note).
 		PlaceholderFormat(sq.Dollar).
 		Set("updated_at", time.Now()).
