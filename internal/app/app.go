@@ -101,7 +101,7 @@ func (a *App) initGRPCServer(_ context.Context) error {
 func (a *App) initPublicHTTPHandlers(ctx context.Context) error {
 	a.mux = runtime.NewServeMux()
 	opts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
-	err := desc.RegisterNoteV1HandlerFromEndpoint(ctx, a.mux, a.serviceProvider.GetConfig().GRPC.GetAddress(), opts)
+	err := desc.RegisterNoteServiceHandlerFromEndpoint(ctx, a.mux, a.serviceProvider.GetConfig().GRPC.GetAddress(), opts)
 	if err != nil {
 		return err
 	}
