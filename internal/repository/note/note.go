@@ -14,7 +14,7 @@ import (
 type Repository interface {
 	CreateNote(ctx context.Context, noteContent *model.NoteContent) (int64, error)
 	DeleteNote(ctx context.Context, userId int64) error
-	GetNoteList(ctx context.Context, req *desc.Empty) (*[]model.Record, error)
+	GetNoteList(ctx context.Context, req *desc.Empty) ([]*model.Record, error)
 	GetNote(ctx context.Context, id int64) (*model.Record, error)
 	UpdateNote(ctx context.Context, updateNoteInfo *model.UpdateNoteInfo) (int64, error)
 }
@@ -82,7 +82,7 @@ func (r *repository) DeleteNote(ctx context.Context, userId int64) error {
 	return nil
 }
 
-func (r *repository) GetNoteList(ctx context.Context, req *desc.Empty) (*[]model.Record, error) {
+func (r *repository) GetNoteList(ctx context.Context, req *desc.Empty) ([]*model.Record, error) {
 	builder := sq.Select("id, title, author, text, email, created_at, updated_at").
 		PlaceholderFormat(sq.Dollar).
 		From(table.Note)
@@ -95,7 +95,7 @@ func (r *repository) GetNoteList(ctx context.Context, req *desc.Empty) (*[]model
 		Name:     "GetNoteList",
 		QueryRaw: query,
 	}
-	var records *[]model.Record
+	var records []*model.Record
 
 	err = r.client.DB().SelectContext(ctx, records, q, args...)
 	if err != nil {

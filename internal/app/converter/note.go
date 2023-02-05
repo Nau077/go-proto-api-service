@@ -60,11 +60,11 @@ func ToDeskRecord(record *model.Record) *desc.Record {
 	}
 }
 
-func ToDescRecordsList(records *[]model.Record) []*desc.Record {
+func ToDescRecordsList(records []*model.Record) []*desc.Record {
 	var recordsList []*desc.Record
 
-	for _, record := range *records {
-		recordsList = append(recordsList, ToDeskRecord(&record))
+	for _, record := range records {
+		recordsList = append(recordsList, ToDeskRecord(record))
 	}
 	return recordsList
 }
