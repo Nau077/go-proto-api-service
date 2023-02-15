@@ -1,1 +1,1 @@
-# golang-pet-first
+# proto-api-service with postresql database
