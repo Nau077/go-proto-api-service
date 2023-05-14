@@ -227,25 +227,42 @@
         "note_content": {
           "$ref": "#/definitions/note_v1NoteContent"
         },
-        "updated_at": {
+        "created_at": {
           "type": "string",
           "format": "date-time"
         },
-        "created_at": {
+        "updated_at": {
           "type": "string",
           "format": "date-time"
         }
       }
     },
-    "note_v1UpdateNoteRequest": {
+    "note_v1UpdateNoteInfo": {
       "type": "object",
       "properties": {
         "id": {
           "type": "string",
           "format": "int64"
         },
-        "NoteContent": {
-          "$ref": "#/definitions/note_v1NoteContent"
+        "title": {
+          "type": "string"
+        },
+        "text": {
+          "type": "string"
+        },
+        "author": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        }
+      }
+    },
+    "note_v1UpdateNoteRequest": {
+      "type": "object",
+      "properties": {
+        "UpdateNoteInfo": {
+          "$ref": "#/definitions/note_v1UpdateNoteInfo"
         }
       }
     },
